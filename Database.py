@@ -18,15 +18,45 @@ class Database:
             PrinterAccess bit,
             StorageAccess bit
             )""")
+    def Assign(self,Type,id):
+        query=""
+        if Type=="Storage":
+          query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
+        elif Type=="Printer":
+                   query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
 
+        elif Type=="Phone":
+                 query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
 
-    def insert(self,query):
+        print(query)
         try:
-            self.cursor.execute(query)
-            self.connection.commit()
+                     self.cursor.execute(query,(1,id))
+                     self.connection.commit()
         except:
-            print("failed")
-            self.connection.rollback()
+                     print("failed")
+                     self.connection.rollback()
+
+    def DeAssign(self,Type,id):
+            query=""
+            if Type=="Storage":
+              query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
+            elif Type=="Printer":
+                       query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
+
+            elif Type=="Phone":
+                     query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
+
+            print(query)
+            try:
+                self.cursor.execute(query,(0,id))
+                self.connection.commit()
+            except:
+                print("failed")
+                self.connection.rollback()
+
+
+
+
 
     def add(self, name,email,phonenumber):
 
@@ -67,91 +97,37 @@ class Database:
 
 
     def AssignPrinter(self,id):
-        query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
+         self.Assign("Printer",id)
 
-        print(query)
-        try:
-            self.cursor.execute(query,(1,id))
-            self.connection.commit()
-        except:
-            print("failed")
-            self.connection.rollback()
     def AssignPhone(self,id):
-           query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
+        self.Assign("Phone",id)
 
-           print(query)
-           try:
-               self.cursor.execute(query,(1,id))
-               self.connection.commit()
-           except:
-               print("failed")
-               self.connection.rollback()
     def assignStorage(self,id):
-         query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
-         print(query)
-         try:
-            self.cursor.execute(query,(1,id))
-            self.connection.commit()
-         except:
-            print("failed")
-            self.connection.rollback()
+         self.Assign("Storage",id)
+
 
     def deAssignPrinter(self,id):
-         query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
-         print(query)
-         try:
-            self.cursor.execute(query,(0,id))
-            self.connection.commit()
-         except:
-             print("failed")
-             self.connection.rollback()
-    def deAssignPhone(self,id):
-              query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
+        self.DeAssign("Printer",id)
 
-              print(query)
-              try:
-                  self.cursor.execute(query,(0,id))
-                  self.connection.commit()
-              except:
-                  print("failed")
-                  self.connection.rollback()
+    def deAssignPhone(self,id):
+        self.DeAssign("Phone",id)
+
+
     def deAssignStorage(self,id):
-            query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
-            print(query)
-            try:
-               self.cursor.execute(query,(0,id))
-               self.connection.commit()
-            except:
-               print("failed")
-               self.connection.rollback()
+        self.DeAssign("Storage",id)
 
     def __del__(self):
         self.connection.close()
 
+
+
 db = Database()
 
-# del_query = "DELETE FROM employees"
-# db.insert(del_query)
-
-# Data Insert into the table
-# query ="""insert into employees(name,email,phonenumber)
-# values('Romy','g_z48@yahoo.com','01022222')"""
-
-# # db.query(query)
-# db.insert(query)
 
 
 
 
-# Data retrieved from the table
 
-# def run(self):
-#     select_query = """
-#         SELECT * FROM employees
-#         """
-#     people = db.query(select_query)
-#     for person in people:
-#         return ("Found %s " % person[1])
 
 
 if __name__ == "__main__":
