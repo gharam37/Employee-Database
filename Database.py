@@ -10,9 +10,9 @@ class Database:
         self.cursor = self.connection.cursor()
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS employees(
             ID INTEGER  PRIMARY KEY AUTOINCREMENT ,
-            name varchar(50) ,
-            email varchar(50),
-            phonenumber varchar(10),
+            name varchar(50) NOT NULL,
+            email varchar(50) NOT NULL,
+            phonenumber varchar(10) NOT NULL,
             PhoneAccess bit Default 0,
             PrinterAccess bit Default 0,
             StorageAccess bit Default 0
@@ -34,9 +34,11 @@ class Database:
         try:
                      self.cursor.execute(query,(1,id))
                      self.connection.commit()
+                     return 1
         except:
                      print("failed")
                      self.connection.rollback()
+                     return 0
     # Remove a permission given an ID
     def DeAssign(self,Type,id):
             query=""
@@ -74,8 +76,10 @@ class Database:
             self.cursor.execute(query)
             self.connection.commit()
             self.Paginator.Paginate()
+            return 1
         except:
             print("failed")
+            return 0
             self.connection.rollback()
     #List everything in Paginator
     def ListAll(self):
