@@ -54,7 +54,7 @@ class Database:
             """
         people = db.query(select_query)
         for person in people:
-            print ("There %s " % person[1])
+            print (person)
     def query(self, query):
         try:
 
@@ -64,6 +64,66 @@ class Database:
             self.connection.rollback()
 
         return self.cursor.fetchall()
+
+
+    def AssignPrinter(self,id):
+        query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
+
+        print(query)
+        try:
+            self.cursor.execute(query,(1,id))
+            self.connection.commit()
+        except:
+            print("failed")
+            self.connection.rollback()
+    def AssignPhone(self,id):
+           query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
+
+           print(query)
+           try:
+               self.cursor.execute(query,(1,id))
+               self.connection.commit()
+           except:
+               print("failed")
+               self.connection.rollback()
+    def assignStorage(self,id):
+         query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
+         print(query)
+         try:
+            self.cursor.execute(query,(1,id))
+            self.connection.commit()
+         except:
+            print("failed")
+            self.connection.rollback()
+
+    def deAssignPrinter(self,id):
+         query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
+         print(query)
+         try:
+            self.cursor.execute(query,(0,id))
+            self.connection.commit()
+         except:
+             print("failed")
+             self.connection.rollback()
+    def deAssignPhone(self,id):
+              query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
+
+              print(query)
+              try:
+                  self.cursor.execute(query,(0,id))
+                  self.connection.commit()
+              except:
+                  print("failed")
+                  self.connection.rollback()
+    def deAssignStorage(self,id):
+            query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
+            print(query)
+            try:
+               self.cursor.execute(query,(0,id))
+               self.connection.commit()
+            except:
+               print("failed")
+               self.connection.rollback()
 
     def __del__(self):
         self.connection.close()
