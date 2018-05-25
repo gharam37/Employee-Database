@@ -1,11 +1,10 @@
 
 import sqlite3
 import fire
-
-
+from Paginator import Paginator
 class Database:
 
-
+    #Intialize the class .. Create table if it doesn't exist
     def __init__(self):
         self.connection =conn = sqlite3.connect('employees.db')
         self.cursor = self.connection.cursor()
@@ -14,10 +13,13 @@ class Database:
             name varchar(50) ,
             email varchar(50),
             phonenumber varchar(10),
-            PhoneAccess bit,
-            PrinterAccess bit,
-            StorageAccess bit
+            PhoneAccess bit Default 0,
+            PrinterAccess bit Default 0,
+            StorageAccess bit Default 0
             )""")
+        self.Paginator=Paginator()
+
+    #Called by Smaller methods To Assign permissions based on type and id
     def Assign(self,Type,id):
         query=""
         if Type=="Storage":
@@ -28,14 +30,14 @@ class Database:
         elif Type=="Phone":
                  query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
 
-        print(query)
+        self.Paginator.Paginate()
         try:
                      self.cursor.execute(query,(1,id))
                      self.connection.commit()
         except:
                      print("failed")
                      self.connection.rollback()
-
+    # Remove a permission given an ID
     def DeAssign(self,Type,id):
             query=""
             if Type=="Storage":
@@ -46,7 +48,7 @@ class Database:
             elif Type=="Phone":
                      query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
 
-            print(query)
+            self.Paginator.Paginate()
             try:
                 self.cursor.execute(query,(0,id))
                 self.connection.commit()
@@ -57,8 +59,8 @@ class Database:
 
 
 
-
-    def add(self, name,email,phonenumber):
+    # Given attributes .. insert into Database the following values
+    def AddEmployee(self, name,email,phonenumber):
 
         b="insert into employees(name,email,phonenumber)values("
 
@@ -69,33 +71,22 @@ class Database:
 
         try:
 
-            print(query);
-
             self.cursor.execute(query)
             self.connection.commit()
+            self.Paginator.Paginate()
         except:
             print("failed")
             self.connection.rollback()
+    #List everything in Paginator
+    def ListAll(self):
+        self.Paginator.ListAll()
+   #List a specific page in Paginator
+    def ListOne(self,number):
+        self.Paginator.ListOne(number)
 
 
-    def run(self):
-        select_query = """
-            SELECT * FROM employees
-            """
-        people = db.query(select_query)
-        for person in people:
-            print (person)
-    def query(self, query):
-        try:
 
-            self.cursor.execute(query)
-            self.connection.commit()
-        except:
-            self.connection.rollback()
-
-        return self.cursor.fetchall()
-
-
+    # Call general method Assign and give it a type and an ID
     def AssignPrinter(self,id):
          self.Assign("Printer",id)
 
@@ -105,7 +96,7 @@ class Database:
     def assignStorage(self,id):
          self.Assign("Storage",id)
 
-
+    # Call general method Assign and give it a type and an ID
     def deAssignPrinter(self,id):
         self.DeAssign("Printer",id)
 
@@ -121,22 +112,7 @@ class Database:
 
 
 
-db = Database()
 
-
-
-
-
-
-
-
+# Make The CLI using Fire
 if __name__ == "__main__":
     fire.Fire(Database)
-
-
-
-
-
-# c.execute("insert into employees(name,email,phonenumber) values('Gh','g_z48@yahoo.com','01022222')")
-#
-# c.execute("select ID from employees")
