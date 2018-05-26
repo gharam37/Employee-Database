@@ -30,7 +30,16 @@ class EmployeesTest(unittest.TestCase):
         self.assertTrue(data[5]==0)
         self.assertTrue(data[6]==0)
 
-    #After u Insert one Element in the Databse .. give it 3 accesses
+    def test_InsertionFailure(self):
+            self.connection =  sqlite3.connect('employees.db')
+            self.cursor = self.connection.cursor()
+            self.cursor.execute("drop table employees")
+            self.Database=Database()
+            Success =self.Database.AddEmployee( "Gharam","g_z48@yahoo.com","010b")
+            self.assertTrue(Success==0)
+
+
+    # After u Insert one Element in the Databse .. give it 3 accesses
     def test_AccessSuccess(self):
             self.connection =  sqlite3.connect('employees.db')
             self.cursor = self.connection.cursor()

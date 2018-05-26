@@ -67,6 +67,10 @@ class Database:
 
     # Given attributes .. insert into Database the following values
     def AddEmployee(self, name, email, phonenumber):
+        try:
+            int(phonenumber)
+        except ValueError:
+            return 0
 
         beginning = "insert into employees(name,email,phonenumber)values("
 
@@ -80,6 +84,7 @@ class Database:
             print("Employee Added Succesfully with code")
             return 1
         except:
+            print("Failure In insertion")
             return 0
             self.connection.rollback()
 
