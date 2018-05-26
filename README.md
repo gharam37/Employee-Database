@@ -54,3 +54,5 @@ used python fire library to make the CLI:
 
 https://github.com/google/python-fire
 
+and sqlite as a database
+
