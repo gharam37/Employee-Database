@@ -15,6 +15,12 @@ python database.py AssignStorage int   **To Give Storage Access using an ID**
 
 python database.py AssignPrinter int   **To Give Printer Access using an ID**
 
+python database.py deAssignPrinter int  **To Remove Printer Access using an ID**
+
+python database.py deAssignPhone int   **To Remove Phone Access using an ID**
+
+python database.py deAssignStorage int   **To Remove Storage Access using an ID**
+
 python database.py ListAll  **To List all Employees in all pages**
 
 python database.py ListOne int  **TO show a certain page given it's number .. numbering Starts from 0**
