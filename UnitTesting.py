@@ -30,10 +30,12 @@ class EmployeesTest(unittest.TestCase):
         self.assertTrue(data[6]==0)
 
     #After u Insert one Element in the Databse .. give it 3 accesses
-    def test_Access(self):
+    def test_AccessSuccess(self):
             self.connection =  sqlite3.connect('employees.db')
             self.cursor = self.connection.cursor()
+            self.cursor.execute("drop table employees")
             self.Database=Database()
+            self.Database.AddEmployee( "Gharam","g_z48@yahoo.com","01022227777")
             Success =self.Database.Assign( "Storage",1)
 
             self.cursor.execute(""" SELECT StorageAccess FROM employees Where id = 1""")
@@ -53,6 +55,42 @@ class EmployeesTest(unittest.TestCase):
             self.assertTrue(Success==1)
             self.assertTrue(data[0]==1) #Phone Access Set to 1
 
+
+    def test_deAccSuccess(self):
+           self.connection =  sqlite3.connect('employees.db')
+           self.cursor = self.connection.cursor()
+           self.cursor.execute("drop table employees")
+           self.Database=Database()
+           self.Database.AddEmployee( "Gharam","g_z48@yahoo.com","01022227777")
+
+           self.Database.Assign( "Storage",1)
+           self.cursor.execute(""" SELECT StorageAccess FROM employees Where id = 1""")
+           data=self.cursor.fetchone()
+           self.assertTrue(data[0]==1) #Set it to One First
+           Success =self.Database.DeAssign( "Storage",1)
+           self.cursor.execute(""" SELECT StorageAccess FROM employees Where id = 1""")
+           data=self.cursor.fetchone()
+           self.assertTrue(data[0]==0) #Set it to One First
+
+           #Repeat For Printer
+           self.Database.Assign( "Printer",1)
+           self.cursor.execute(""" SELECT PrinterAccess FROM employees Where id = 1""")
+           data=self.cursor.fetchone()
+           self.assertTrue(data[0]==1)
+           Success =self.Database.DeAssign( "Printer",1)
+           self.cursor.execute(""" SELECT PrinterAccess FROM employees Where id = 1""")
+           data=self.cursor.fetchone()
+           self.assertTrue(data[0]==0)
+
+            # Repeat for Phone
+           self.Database.Assign( "Phone",1)
+           self.cursor.execute(""" SELECT PhoneAccess FROM employees Where id = 1""")
+           data=self.cursor.fetchone()
+           self.assertTrue(data[0]==1)
+           Success =self.Database.DeAssign( "Phone",1)
+           self.cursor.execute(""" SELECT PhoneAccess FROM employees Where id = 1""")
+           data=self.cursor.fetchone()
+           self.assertTrue(data[0]==0)
 
 
 
