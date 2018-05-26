@@ -19,7 +19,7 @@ python database.py ListAll  **To List all Employees in all pages**
 
 python database.py ListOne int  **TO show a certain page given it's number .. numbering Starts from 0**
 
-python UnitTesting.py **To Run unit tests *
+python UnitTesting.py **To Run unit tests **
 
 
 

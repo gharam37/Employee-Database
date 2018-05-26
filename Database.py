@@ -1,12 +1,12 @@
-
 import sqlite3
 import fire
 from Paginator import Paginator
-class Database:
 
-    #Intialize the class .. Create table if it doesn't exist
+
+class Database:
+    # Intialize the class .. Create table if it doesn't exist
     def __init__(self):
-        self.connection =conn = sqlite3.connect('employees.db')
+        self.connection = conn = sqlite3.connect('employees.db')
         self.cursor = self.connection.cursor()
         self.cursor.execute("""CREATE TABLE IF NOT EXISTS employees(
             ID INTEGER  PRIMARY KEY AUTOINCREMENT ,
@@ -17,104 +17,102 @@ class Database:
             PrinterAccess bit Default 0,
             StorageAccess bit Default 0
             )""")
-        self.Paginator=Paginator()
+        self.Paginator = Paginator()
 
-    #Called by Smaller methods To Assign permissions based on type and id
-    def Assign(self,Type,id):
-        query=""
-        if Type=="Storage":
-          query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
-        elif Type=="Printer":
-                   query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
+    # Called by Smaller methods To Assign permissions based on type and id
+    def Assign(self, Type, id):
+        query = ""
+        if Type == "Storage":
+            query = "update employees set StorageAccess = ? WHERE id = ?"
 
-        elif Type=="Phone":
-                 query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
+        elif Type == "Printer":
+            query = "update employees set PrinterAccess = ? WHERE id = ?"
+
+        elif Type == "Phone":
+            query = "update employees set PhoneAccess = ? WHERE id = ? "
 
         try:
-                     self.cursor.execute(query,(1,id))
-                     self.connection.commit()
-                     self.Paginator.Paginate()
-                     return 1
+            self.cursor.execute(query, (1, id))
+            self.connection.commit()
+            self.Paginator.Paginate()
+            print( "Operation Succesfull ")
+            return 1
         except:
-                     print("failed")
-                     self.connection.rollback()
-                     return 0
-    # Remove a permission given an ID
-    def DeAssign(self,Type,id):
-            query=""
-            if Type=="Storage":
-              query= "update employees "+"set StorageAccess = ? "+" WHERE id = ?"
-            elif Type=="Printer":
-                       query= "update employees "+"set PrinterAccess = ? "+" WHERE id = ?"
+            print("failed")
+            self.connection.rollback()
+            return 0
 
-            elif Type=="Phone":
-                     query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
+    # Remove a permission given an ID
+    def DeAssign(self, Type, id):
+            query = ""
+            if Type == "Storage":
+                query = "update employees set StorageAccess = ? WHERE id = ?"
+
+            elif Type == "Printer":
+                query = "update employees set PrinterAccess = ? WHERE id = ?"
+
+            elif Type == "Phone":
+                query = "update employees set PhoneAccess = ? WHERE id = ? "
 
             try:
-                self.cursor.execute(query,(0,id))
+                self.cursor.execute(query, (0, id))
                 self.connection.commit()
                 self.Paginator.Paginate()
+                print( "Operation Succesfull ")
+                return 1
             except:
                 print("failed")
                 self.connection.rollback()
-
-
-
+                return 0
 
     # Given attributes .. insert into Database the following values
-    def AddEmployee(self, name,email,phonenumber):
+    def AddEmployee(self, name, email, phonenumber):
 
-        b="insert into employees(name,email,phonenumber)values("
+        beginning = "insert into employees(name,email,phonenumber)values("
 
-        comma="'"
-        query =b+comma+name+comma+","+comma+email+comma+","+comma+phonenumber+comma+")"
-
-
+        comma = "'"
+        query = beginning+"'"+name+"'"+","+"'"+email+"'"+","+"'"+phonenumber+"'"+")"
 
         try:
-
             self.cursor.execute(query)
             self.connection.commit()
             self.Paginator.Paginate()
+            print("Employee Added Succesfully with code")
             return 1
         except:
             return 0
             self.connection.rollback()
-    #List everything in Paginator
+
+    # List everything in Paginator
     def ListAll(self):
         self.Paginator.ListAll()
-   #List a specific page in Paginator
-    def ListOne(self,number):
+
+    # List a specific page in Paginator
+    def ListOne(self, number):
         self.Paginator.ListOne(number)
 
+    # Call general method Assign and give it a type and an ID
+    def AssignPrinter(self, id):
+        self.Assign("Printer", id)
 
+    def AssignPhone(self, id):
+        self.Assign("Phone", id)
+
+    def AssignStorage(self, id):
+        self.Assign("Storage", id)
 
     # Call general method Assign and give it a type and an ID
-    def AssignPrinter(self,id):
-         self.Assign("Printer",id)
+    def deAssignPrinter(self, id):
+        self.DeAssign("Printer", id)
 
-    def AssignPhone(self,id):
-        self.Assign("Phone",id)
+    def deAssignPhone(self, id):
+        self.DeAssign("Phone", id)
 
-    def AssignStorage(self,id):
-         self.Assign("Storage",id)
-
-    # Call general method Assign and give it a type and an ID
-    def deAssignPrinter(self,id):
-        self.DeAssign("Printer",id)
-
-    def deAssignPhone(self,id):
-        self.DeAssign("Phone",id)
-
-
-    def deAssignStorage(self,id):
-        self.DeAssign("Storage",id)
+    def deAssignStorage(self, id):
+        self.DeAssign("Storage", id)
 
     def __del__(self):
         self.connection.close()
-
-
-
 
 # Make The CLI using Fire
 if __name__ == "__main__":
