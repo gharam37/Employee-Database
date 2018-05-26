@@ -29,14 +29,31 @@ class EmployeesTest(unittest.TestCase):
         self.assertTrue(data[5]==0)
         self.assertTrue(data[6]==0)
 
+    #After u Insert one Element in the Databse .. give it 3 accesses
+    def test_Access(self):
+            self.connection =  sqlite3.connect('employees.db')
+            self.cursor = self.connection.cursor()
+            self.Database=Database()
+            Success =self.Database.Assign( "Storage",1)
+
+            self.cursor.execute(""" SELECT StorageAccess FROM employees Where id = 1""")
+            data=self.cursor.fetchone()
+            self.assertTrue(Success==1)
+            self.assertTrue(data[0]==1) #Storage Access Set to 1
+
+            Success =self.Database.Assign( "Printer",1)
+            self.cursor.execute(""" SELECT PrinterAccess FROM employees Where id = 1""")
+            data=self.cursor.fetchone()
+            self.assertTrue(Success==1)
+            self.assertTrue(data[0]==1) #Printer Access Set to 1
+
+            Success =self.Database.Assign( "Phone",1)
+            self.cursor.execute(""" SELECT PhoneAccess FROM employees Where id = 1""")
+            data=self.cursor.fetchone()
+            self.assertTrue(Success==1)
+            self.assertTrue(data[0]==1) #Phone Access Set to 1
 
 
-    def TestInsertionFailure(self):
-        self.Database.AddEmployee( "Romy",None,"010222222")
-        self.cursor.execute(""" SELECT * FROM employees""")
-        data=self.cursor.fetchall()
-        #Since Database is Empty .. it should result in 1
-        self.assertTrue(len(data)==1)
 
 
 
@@ -44,12 +61,15 @@ class EmployeesTest(unittest.TestCase):
 
 
 
-test= EmployeesTest()
-
-test.test_Insertion()
 
 
 
-# Make The CLI using Fire
+
+
+
+
+
+
+
 if __name__ == "__main__":
     unittest.main()

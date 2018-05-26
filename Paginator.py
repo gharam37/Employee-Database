@@ -60,6 +60,12 @@ class Paginator:
         StorageAccess="None"
         PrinterAccess="None"
         for innerRow in innerList:
+            if innerRow[4] == 1:
+                phoneAccess="Yes"
+            if innerRow[5] == 1:
+                PrinterAccess="Yes"
+            if innerRow[6] == 1:
+                StorageAccess="Yes"
             print(" ID "+str(innerRow[0])+" Name "+innerRow[1]
                +" Email "+innerRow[3]+" Phone Access "+phoneAccess+
                " Printer Access "+PrinterAccess

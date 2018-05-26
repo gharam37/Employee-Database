@@ -30,10 +30,10 @@ class Database:
         elif Type=="Phone":
                  query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
 
-        self.Paginator.Paginate()
         try:
                      self.cursor.execute(query,(1,id))
                      self.connection.commit()
+                     self.Paginator.Paginate()
                      return 1
         except:
                      print("failed")
@@ -50,10 +50,10 @@ class Database:
             elif Type=="Phone":
                      query= "update employees "+"set PhoneAccess = ? "+" WHERE id = ?"
 
-            self.Paginator.Paginate()
             try:
                 self.cursor.execute(query,(0,id))
                 self.connection.commit()
+                self.Paginator.Paginate()
             except:
                 print("failed")
                 self.connection.rollback()
@@ -78,7 +78,6 @@ class Database:
             self.Paginator.Paginate()
             return 1
         except:
-            print("failed")
             return 0
             self.connection.rollback()
     #List everything in Paginator
@@ -97,7 +96,7 @@ class Database:
     def AssignPhone(self,id):
         self.Assign("Phone",id)
 
-    def assignStorage(self,id):
+    def AssignStorage(self,id):
          self.Assign("Storage",id)
 
     # Call general method Assign and give it a type and an ID
