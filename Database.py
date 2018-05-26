@@ -35,7 +35,7 @@ class Database:
             self.cursor.execute(query, (1, id))
             self.connection.commit()
             self.Paginator.Paginate()
-            print( "Operation Succesfull ")
+            print("Operation Succesfull ")
             return 1
         except:
             print("failed")
@@ -72,10 +72,9 @@ class Database:
         except ValueError:
             return 0
 
-        beginning = "insert into employees(name,email,phonenumber)values("
-
+        frst = "insert into employees(name,email,phonenumber)values("
         comma = "'"
-        query = beginning+"'"+name+"'"+","+"'"+email+"'"+","+"'"+phonenumber+"'"+")"
+        query = frst+"'"+name+"'"+","+"'"+email+"'"+","+"'"+phonenumber+"'"+")"
 
         try:
             self.cursor.execute(query)
